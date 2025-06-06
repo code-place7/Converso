@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { subjects } from "@/constants";
 import { Textarea } from "@/components/ui/textarea";
-// import {createCompanion} from "@/lib/actions/companion.actions";
+import { createCompanion } from "@/lib/actions/companion.action";
 import { redirect } from "next/navigation";
 
 const formSchema = z.object({
@@ -48,26 +48,20 @@ const CompanionForm = () => {
     },
   });
 
-  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  //     const companion = await createCompanion(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const companion = await createCompanion(values);
 
-  //     if(companion) {
-  //         redirect(`/companions/${companion.id}`);
-  //     } else {
-  //         console.log('Failed to create a companion');
-  //         redirect('/');
-  //     }
-  // }
+    if (companion) {
+      redirect(`/companions/${companion.id}`);
+    } else {
+      console.log("Failed to create a companion");
+      redirect("/");
+    }
+  };
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log("Form submit");
-        }}
-        className="space-y-8"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="name"
