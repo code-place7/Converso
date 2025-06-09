@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cn, getSubjectColor } from "@/lib/utils";
+import { cn, configureAssistant, getSubjectColor } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
@@ -31,6 +31,11 @@ const Companionlecture = ({
   const [messages, setMessages] = useState<SavedMessage[]>([]);
 
   const lottieRef = useRef<LottieRefCurrentProps>(null);
+  // Get the latest user and assistant messages for subtitles
+  const latestUserMessage = messages.find((msg) => msg.role === "user");
+  const latestAssistantMessage = messages.find(
+    (msg) => msg.role === "assistant"
+  );
 
   useEffect(() => {
     if (lottieRef) {
@@ -88,12 +93,15 @@ const Companionlecture = ({
     setCallStatus(CallStatus.CONNECTING);
 
     const assistantOverrides = {
-      variableValues: { subject, topic, style },
-      clientMessages: ["transcript"],
-      serverMessages: [],
+      variableValues: {
+        subject,
+        topic,
+        style,
+        clientMessage: "",
+        serverMessage: "",
+      },
     };
 
-    // @ts-expect-error
     vapi.start(configureAssistant(voice, style), assistantOverrides);
   };
 
@@ -194,6 +202,16 @@ const Companionlecture = ({
 
       <section className="transcript">
         <div className="transcript-message no-scrollbar">
+          {latestUserMessage && (
+            <p className="subtitle-user">
+              {userName}: {latestUserMessage.content}
+            </p>
+          )}
+          {latestAssistantMessage && (
+            <p className="subtitle-assistant">
+              {name.split(" ")[0]}: {latestAssistantMessage.content}
+            </p>
+          )}
           {messages.map((message, index) => {
             if (message.role === "assistant") {
               return (
