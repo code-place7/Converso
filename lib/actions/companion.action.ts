@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "@/lib/supabase";
 
+// it creates a new companion and applies it on the companion form component and the new companion page
 export const createCompanion = async (formData: CreateCompanion) => {
   const { userId: author } = await auth();
   const supabase = createSupabaseClient();
@@ -18,6 +19,7 @@ export const createCompanion = async (formData: CreateCompanion) => {
   return data[0];
 };
 
+// it retrieves all companions with optional filters for subject and topic, and applies it on the companioncard component and the companions page
 export const getAllCompanions = async ({
   limit = 10,
   page = 1,
@@ -47,6 +49,7 @@ export const getAllCompanions = async ({
   return companions;
 };
 
+// it retrieves a specific companion by its ID and applies it on the companion lecture component and the companion/[id] page
 export const getCompanion = async (id: string) => {
   const supabase = createSupabaseClient();
 
@@ -60,6 +63,7 @@ export const getCompanion = async (id: string) => {
   return data[0];
 };
 
+// it adds a new session to the session history table  when user ends the session with a companion  and applies it on the companion lecture component and  companion/[id] page
 export const addToSessionHistory = async (companionId: string) => {
   const { userId } = await auth();
   const supabase = createSupabaseClient();
@@ -73,6 +77,7 @@ export const addToSessionHistory = async (companionId: string) => {
   return data;
 };
 
+// it retrieves the most recent sessions and applies it on the home page
 export const getRecentSessions = async (limit = 10) => {
   const supabase = createSupabaseClient();
   const { data, error } = await supabase
@@ -86,6 +91,7 @@ export const getRecentSessions = async (limit = 10) => {
   return data.map(({ companions }) => companions);
 };
 
+// it retrieves all sessions of a specific user and we apply it on the profile page and the home page
 export const getUserSessions = async (userId: string, limit = 10) => {
   const supabase = createSupabaseClient();
   const { data, error } = await supabase
@@ -98,4 +104,48 @@ export const getUserSessions = async (userId: string, limit = 10) => {
   if (error) throw new Error(error.message);
 
   return data.map(({ companions }) => companions);
+};
+
+// it retrieves all companions created by a specific user and we apply it on the profile page
+export const getUserCompanions = async (userId: string) => {
+  const supabase = createSupabaseClient();
+  const { data, error } = await supabase
+    .from("companions")
+    .select()
+    .eq("author", userId);
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
+// it checks if the user has permissions to create a new companion based on their plan or feature limits
+export const newCompanionPermissions = async () => {
+  const { userId, has } = await auth();
+  const supabase = createSupabaseClient();
+
+  let limit = 0;
+
+  if (has({ plan: "pro" })) {
+    return true;
+  } else if (has({ feature: "3_companion_limit" })) {
+    limit = 3;
+  } else if (has({ feature: "10_companion_limit" })) {
+    limit = 10;
+  }
+
+  const { data, error } = await supabase
+    .from("companions")
+    .select("id", { count: "exact" })
+    .eq("author", userId);
+
+  if (error) throw new Error(error.message);
+
+  const companionCount = data?.length;
+
+  if (companionCount >= limit) {
+    return false;
+  } else {
+    return true;
+  }
 };
