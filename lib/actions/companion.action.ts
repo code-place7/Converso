@@ -119,18 +119,19 @@ export const getUserCompanions = async (userId: string) => {
   return data;
 };
 
-// it checks if the user has permissions to create a new companion based on their plan or feature limits
+// it checks if the user has permissions to create a new companion based on their plan or feature limits  and applies it on the companion new page
+
 export const newCompanionPermissions = async () => {
   const { userId, has } = await auth();
   const supabase = createSupabaseClient();
 
   let limit = 0;
 
-  if (has({ plan: "pro" })) {
+  if (has({ plan: "elite" })) {
     return true;
-  } else if (has({ feature: "3_companion_limit" })) {
+  } else if (has({ feature: "2_companions_limit" })) {
     limit = 3;
-  } else if (has({ feature: "10_companion_limit" })) {
+  } else if (has({ feature: "10_companions_limit" })) {
     limit = 10;
   }
 
