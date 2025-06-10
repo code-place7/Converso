@@ -1,44 +1,36 @@
-import Calltoaction from "@/components/Calltoaction";
 import CompanionCard from "@/components/Companioncard";
-import Companionlist from "@/components/Companionlist";
+import CompanionsList from "@/components/Companionlist";
+import Calltoaction from "@/components/Calltoaction";
 import { recentSessions } from "@/constants";
+import {
+  getAllCompanions,
+  getRecentSessions,
+} from "@/lib/actions/companion.action";
+import { getSubjectColor } from "@/lib/utils";
 
-const Home = async () => {
+const Page = async () => {
+  const companions = await getAllCompanions({ limit: 3 });
+  const recentSessionsCompanions = await getRecentSessions(10);
+
   return (
     <main>
       <h1>Popular Companions</h1>
 
       <section className="home-section">
-        <CompanionCard
-          id="123"
-          name="Neura  the Brainy EXplorer"
-          topic="Neural Network Of the Brain"
-          subject="science"
-          duration={45}
-          color="#ffda6e"
-        />
-        <CompanionCard
-          id="456"
-          name="Countsy   the Number  Wizard"
-          topic="Numbers and Counting"
-          subject="math"
-          duration={30}
-          color="#e5d0ff"
-        />
-        <CompanionCard
-          id="789"
-          name="Verba the Wordy Wonder"
-          topic="Words and Language"
-          subject="english"
-          duration={30}
-          color="#BDE7FF"
-        />
+        {companions.map((companion) => (
+          <CompanionCard
+            key={companion.id}
+            {...companion}
+            color={getSubjectColor(companion.subject)}
+          />
+        ))}
       </section>
+
       <section className="home-section">
-        <Companionlist
+        <CompanionsList
           title="Recently completed sessions"
+          companions={recentSessionsCompanions}
           classNames="w-2/3 max-lg:w-full"
-          companions={recentSessions}
         />
         <Calltoaction />
       </section>
@@ -46,4 +38,4 @@ const Home = async () => {
   );
 };
 
-export default Home;
+export default Page;

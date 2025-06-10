@@ -6,7 +6,7 @@ import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import soundwaves from "@/constants/soundwaves.json";
-// import {addToSessionHistory} from "@/lib/actions/companion.actions";
+import { addToSessionHistory } from "@/lib/actions/companion.action";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -107,6 +107,8 @@ const Companionlecture = ({
 
   const handleDisconnect = () => {
     setCallStatus(CallStatus.FINISHED);
+    addToSessionHistory(companionId);
+
     vapi.stop();
   };
 
@@ -203,12 +205,12 @@ const Companionlecture = ({
       <section className="transcript">
         <div className="transcript-message no-scrollbar">
           {latestUserMessage && (
-            <p className="subtitle-user">
+            <p className="subtitle-user text-black">
               {userName}: {latestUserMessage.content}
             </p>
           )}
           {latestAssistantMessage && (
-            <p className="subtitle-assistant">
+            <p className="subtitle-assistant text-black">
               {name.split(" ")[0]}: {latestAssistantMessage.content}
             </p>
           )}
