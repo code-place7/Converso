@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-username/Converso/main/favicon.ico" alt="Mentora Logo" width="120" />
+  <img src="public/images//logo.svg" alt="Converso Logo" width="120" /> 
+  
 </p>
 
 <h1 align="center">🚀 Converso</h1>
