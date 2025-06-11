@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-username/Converso/main/app/favicon.ico" alt="Mentora Logo" width="120" />
+  <img src="https://raw.githubusercontent.com/your-username/Converso/main/favicon.ico" alt="Mentora Logo" width="120" />
 </p>
 
 <h1 align="center">🚀 Converso</h1>
@@ -82,7 +82,7 @@ Feel free to check [issues page](../../issues) or submit a pull request.
 
 ## 📝 License
 
-MIT License © [your-username](https://github.com/your-username)
+MIT License © [code-place7](https://github.com/code-place7)
 
 ---
 
