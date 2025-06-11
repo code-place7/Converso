@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-username/mentora/main/favicon.ico" alt="Mentora Logo" width="120" />
+  <img src="https://raw.githubusercontent.com/your-username/Converso/main/app/favicon.ico" alt="Mentora Logo" width="120" />
 </p>
 
 <h1 align="center">🚀 Converso</h1>
@@ -67,8 +67,8 @@ npm install
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img src="public/screenshot1.png" width="350" alt="Mentora Screenshot 1" />
-  <img src="public/screenshot2.png" width="350" alt="Mentora Screenshot 2" />
+  <img src="public/home.png" width="350" alt="Mentora Screenshot 1" />
+  <img src="public/takelesson.png" width="350" alt="Mentora Screenshot 2" />
 </p>
 
 ---
